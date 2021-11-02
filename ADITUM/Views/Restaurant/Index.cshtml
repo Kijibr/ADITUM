@@ -1,0 +1,62 @@
+﻿@model IEnumerable<ADITUM.Models.Restaurant>
+
+@{
+    ViewData["Title"] = "Aditum";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+</head>
+<body>
+    <form class="d-flex flex-wrap justify-content-center" id="search-movie">
+        <input id="searchinput" class="form-control mr-sm-2" type="text" placeholder="Pesquise o horário: inicio-fim" aria-label="Search">
+        <button id="searchbtn" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form><br />
+
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RestaurantName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OpenHours)
+                </th>
+            </tr>
+        </thead>
+        <tbody  id="hours">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RestaurantName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OpenHours)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        $('#searchbtn').click(async function (e) {
+            e.preventDefault();
+                var rest = $('#searchinput').val();
+                var search = {
+                    "crossDomain": true,
+                    "url": "https://retoolapi.dev/EhQgZs/aditum?OpenHours=" + rest,
+                    "method": "GET",
+                }
+                $.ajax(search)
+                    .done(await function resp (data) {
+                        console.table(data)
+                        $("#hours").html("<td>" + data + "<td>" + data );
+                    })
+            });
+    </script>
+
+</body>
+</html>
